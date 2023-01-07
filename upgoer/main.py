@@ -2,10 +2,8 @@
 from argparse import ArgumentParser
 from pathlib import Path
 from random import choice
-from string import punctuation
 
 from numpy.linalg import norm
-from seaborn import histplot
 from termcolor import colored
 
 from utils.data import clean_word, load_words, load_vectors
@@ -53,14 +51,12 @@ We don't have any surcharge for this option (unlike many other eateries) which m
 All the best with your next dining experience, hopefully you find something that suits your price point BEFORE you order, so that you aren't forced to leave your welcome review.
 """
 
+    punctuation = ".", ",", "(", ")"
+
     for i in punctuation:
         test = test.replace(i, " " + i + " ")
 
-    print(test)
-
     test = test.split()
-
-    print(test)
 
     for n, word in enumerate(test):
         if all((i in punctuation) for i in word):
