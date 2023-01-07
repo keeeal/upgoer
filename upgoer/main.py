@@ -2,6 +2,7 @@
 from argparse import ArgumentParser
 from pathlib import Path
 from random import choice
+from string import punctuation
 
 from numpy.linalg import norm
 from seaborn import histplot
@@ -14,14 +15,6 @@ def main(words_path: Path, vectors_path: Path):
     words = load_words(words_path)
     vectors = load_vectors(vectors_path)
     words = [word for word in words if word in vectors]
-
-    test = """
-Hi James, thanks for taking the time to leave an honest, impartial and fair review. You can get any of our menu Burgers in vegetarian form, by either replacing the all beef patty with an awesome vegetarian patty, or our extremely popular hash brown option which gives you two golden hash browns with melted cheese.
-
-We don't have any surcharge for this option (unlike many other eateries) which means you can get a Vegetarian Cheeseburger for $8 or a vegetarian Single $10 (which includes fresh crisp lettuce, juicy tomato, onion, cheese, secret sauce all on freshly toasted bun). Personally, we think that's pretty decent value, but hey, 6 years of successful trade, what do we know!
-
-All the best with your next dining experience, hopefully you find something that suits your price point BEFORE you order, so that you aren't forced to leave your welcome review.
-"""
 
     def distance(a: str, b: str) -> float:
         return float(norm(vectors[a] - vectors[b]))
@@ -52,8 +45,32 @@ All the best with your next dining experience, hopefully you find something that
 
         return colored(word, c)
 
-    output = [closest_word(word) for word in test.split()]
-    print(" ".join(map(color_word, output)))
+    test = """
+Hi James, thanks for taking the time to leave an honest, impartial and fair review. You can get any of our menu Burgers in vegetarian form, by either replacing the all beef patty with an awesome vegetarian patty, or our extremely popular hash brown option which gives you two golden hash browns with melted cheese.
+
+We don't have any surcharge for this option (unlike many other eateries) which means you can get a Vegetarian Cheeseburger for $8 or a vegetarian Single $10 (which includes fresh crisp lettuce, juicy tomato, onion, cheese, secret sauce all on freshly toasted bun). Personally, we think that's pretty decent value, but hey, 6 years of successful trade, what do we know!
+
+All the best with your next dining experience, hopefully you find something that suits your price point BEFORE you order, so that you aren't forced to leave your welcome review.
+"""
+
+    for i in punctuation:
+        test = test.replace(i, " " + i + " ")
+
+    print(test)
+
+    test = test.split()
+
+    print(test)
+
+    for n, word in enumerate(test):
+        if all((i in punctuation) for i in word):
+            test[n] = word, 0
+        else:
+            test[n] = closest_word(word)
+
+    test = " ".join(map(color_word, test))
+
+    print(test)
 
 
 if __name__ == "__main__":
